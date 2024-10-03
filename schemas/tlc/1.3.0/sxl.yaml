@@ -534,20 +534,44 @@ objects:
               test: Mode used for various tests, e.g. signal lights
       S0021:
         description: |-
-          Manually set detector logic.
-          Provides status of detector logic (1-255) regarding if they are either forced to true or false.
+          Detector logics forcing.
+          Provides detector logics (1-255) forcing status, indicating whether they are forced or not.
+          Note that this is not the same as the actual value.
           Can be used to connect RSMP compatible detection equipment to the traffic light controller. Can also be used for prioritization.
         arguments:
           detectorlogics:
             type: string
             description: |-
-              Manually set detector logic as text field.
-              Each character represent the state in consecutive order,
-              where the leftmost character starts with detector logic 1.
-              0 : Detector logic not manually set
-              1 : Detector logic manually set
+              Detector logic forcing, provided as a string like "1001111-0".
+              Each character represent the state of a detector logic:
+
+              0 : Detector logic not forced
+              1 : Detector logic forced
               - : Detector logic is undefined/does not exist
-            pattern: "^[01]*$"
+
+              The leftmost character represents the first detector logic,
+              the second character the second detector logic, etc.
+              
+              If detector logic component ids include an integer index part,
+              it's recommended to use it when mapping between index and detector logic, e.g.:
+
+              KK+AG0503=001DL001 <=> 1
+              KK+AG0503=001DL002 <=> 2
+              KK+AG0503=001DL004 <=> 4
+
+              The status of these three detector logics would be send as "11-1", assuming they are all forced.
+              Because there is no KK+AG0503=001DL003 component,
+              (which would corresponded to index 3), the 3rd character is set to '-'.
+
+              If detector logic component ids has no integer part,
+              it's recommended to index them by sorting alphabetically:
+
+              prio_a <=> 1
+              prio_b <=> 2
+              prio_c <=> 3
+
+              The status of these three detector logics would be send as "111", assuming they are all forced.
+            pattern: "^[01-]*$"
       S0022:
         description: |-
           List of time plans.
