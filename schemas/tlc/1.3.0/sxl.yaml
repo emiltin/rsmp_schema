@@ -143,6 +143,24 @@ objects:
               See the coordination section for more information.
             min: 0
             max: 999
+          cycle_ms:
+            type: integer
+            description: |-
+              The cycle counter in milliseconds.
+              The cycle_ms attribute divided by 1000 and rounded down to the nearest
+              integer must equal the cyclecounter attribute.
+            min: 0
+            max: 999999
+            lazy: true
+          base_ms:
+            type: integer
+            description: |-
+              The base cycle counter in milliseconds.
+              The base_ms attribute divided by 1000 and rounded down to the nearest
+              integer must equal the basecyclecounter attribute.
+            min: 0
+            max: 999999
+            lazy: true
           stage:
             type: integer
             description: Current stage (isolated)
